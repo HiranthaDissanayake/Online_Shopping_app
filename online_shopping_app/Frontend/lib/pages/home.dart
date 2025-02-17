@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:online_shopping_app/components/category_option.dart';
 import 'package:online_shopping_app/components/new_arrivals_item_card.dart';
+import 'package:online_shopping_app/pages/categories/blouses_page.dart';
+import 'package:online_shopping_app/pages/categories/frocks_page.dart';
+import 'package:online_shopping_app/pages/categories/kids_page.dart';
+import 'package:online_shopping_app/pages/categories/saree_page.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -22,10 +26,20 @@ class _HomeState extends State<Home> {
         child: Column(
           children: [
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-              Text(
-                "Hello Hirantha",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              Row(
+                children: [
+                  Text(
+                    "Red",
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.red),
+                  ),
+                  Text("Dress", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),),
+
+                  Image.asset("assets/Images/logo.png", width: 60, height: 60,),
+                ],
               ),
+
+              
+
               Container(
                 decoration: BoxDecoration(
                   color: Colors.deepOrange,
@@ -135,22 +149,38 @@ class _HomeState extends State<Home> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  CategoryOption(imgUrl: "assets/Images/image3.png", title: 'Blouses',),
+                  GestureDetector(
+                    onTap: (){
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=> BlousesPage()));
+                    },
+                    child: CategoryOption(imgUrl: "assets/Images/image3.png", title: 'Blouses',)),
                   SizedBox(
                     width: 20,
                   ),
-                  CategoryOption(imgUrl: "assets/Images/image4.png", title: 'Frocks',),
+                  GestureDetector(
+                    onTap: (){
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=> Frockspage()));
+                    },
+                    child: CategoryOption(imgUrl: "assets/Images/image4.png", title: 'Frocks',)),
         
                   SizedBox(
                     width: 20,
                   ),
         
-                  CategoryOption(imgUrl: "assets/Images/image5.png", title: 'Sarees',),        
+                  GestureDetector(
+                    onTap: (){
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=> Sareepage()));
+                    },
+                    child: CategoryOption(imgUrl: "assets/Images/image5.png", title: 'Sarees',)),        
         
                    SizedBox(
                     width: 20,
                   ),
-                  CategoryOption(imgUrl: "assets/Images/image6.png", title: 'Kids',),
+                  GestureDetector(
+                    onTap: (){
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=> Kidspage()));
+                    },
+                    child: CategoryOption(imgUrl: "assets/Images/image6.png", title: 'Kids Dresses',)),
         
                   
                 ],

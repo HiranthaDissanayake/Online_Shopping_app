@@ -1,6 +1,6 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:online_shopping_app/pages/cart.dart';
+import 'package:online_shopping_app/pages/cartPage.dart';
 import 'package:online_shopping_app/pages/home.dart';
 import 'package:online_shopping_app/pages/profile.dart';
 
@@ -17,7 +17,7 @@ class _BottomnavbarState extends State<Bottomnavbar> {
 
   late List<Widget> pages = [
     Home(),
-    Cart(),
+    CartPage(),
     Profile()
   ];
 

@@ -6,7 +6,11 @@ import 'package:online_shopping_app/components/bottomNavBar.dart';
 import 'package:online_shopping_app/pages/signup.dart';
 
 class Login extends StatefulWidget {
-  const Login({super.key});
+  String userName;
+   Login({
+    super.key,
+    required this.userName,
+  });
 
   @override
   State<Login> createState() => _LoginState();
@@ -146,10 +150,7 @@ class _LoginState extends State<Login> {
 
                               Api.login(enteredData, context);
 
-                              _emailController.clear();
-                              _passwordController.clear();
-
-                              // Navigator.push(context, MaterialPageRoute(builder: (context) => Bottomnavbar()));
+                            
                             }
                             
                           },

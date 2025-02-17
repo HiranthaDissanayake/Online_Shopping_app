@@ -17,6 +17,8 @@ class _SignUpState extends State<SignUp> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
+  String userName = "";
+
   final _formkey = GlobalKey<FormState>();
 
   @override
@@ -159,7 +161,7 @@ class _SignUpState extends State<SignUp> {
                             // Pass the Data map to Api 
                             Api.registerUser(Data, context);
 
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => Login(userName: _usernameController.text)));
                           }
                           
                         },
@@ -175,7 +177,7 @@ class _SignUpState extends State<SignUp> {
                           onPressed: (){
                             
 
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => Login(userName: _usernameController.text)));
                           },
                           child: Text("Login", style: TextStyle(color: Colors.deepOrange),),
                         ),

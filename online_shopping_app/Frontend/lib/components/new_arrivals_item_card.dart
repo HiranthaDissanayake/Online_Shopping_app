@@ -13,7 +13,7 @@ class _NewArrivalsItemCardState extends State<NewArrivalsItemCard> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: (){
-      Navigator.push(context, MaterialPageRoute(builder: (context) => Item() ));
+      Navigator.push(context, MaterialPageRoute(builder: (context) => Item(item: {},) ));
       },
       child: AnimatedContainer(
         duration: Duration(seconds: 2),

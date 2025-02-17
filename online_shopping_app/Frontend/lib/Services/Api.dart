@@ -2,11 +2,12 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:online_shopping_app/Models/userModel.dart';
+import 'package:online_shopping_app/components/bottomNavBar.dart';
 import 'package:online_shopping_app/pages/home.dart';
 
 class Api {
 
-  static const baseUrl = "http://192.168.239.38:5001/api/";
+  static const baseUrl = "http://192.168.21.38:5001/api/";
 
   // POST API for register user
 
@@ -68,7 +69,7 @@ class Api {
             )
           );
 
-          Navigator.push(context, MaterialPageRoute(builder: (context)=> Home()));
+          Navigator.push(context, MaterialPageRoute(builder: (context)=> Bottomnavbar()));
 
         } else if(res.statusCode == 401){
           ScaffoldMessenger.of(context).showSnackBar(
@@ -98,10 +99,71 @@ class Api {
       print(e);
       
     }
-
-
-
   }
+
+
+  // GET API for fetch all blouses
+
+  Future<List<dynamic>> fetchBlouses() async {
+
+  var url = Uri.parse("${baseUrl}blouses");
+
+  final res = await http.get(url);
+
+  if (res.statusCode == 200) {
+    return jsonDecode(res.body);
+  } else {
+    throw Exception('Failed to load blouses');
+  }
+}
+
+
+  // GET API for fetch all frocks
+
+  Future<List<dynamic>> fetchFrocks() async {
+
+  var url = Uri.parse("${baseUrl}frocks");
+
+  final res = await http.get(url);
+
+  if (res.statusCode == 200) {
+    return jsonDecode(res.body);
+  } else {
+    throw Exception('Failed to load frocks');
+  }
+}
+
+
+  // GET API for fetch all sarees
+
+  Future<List<dynamic>> fetchSarees() async {
+
+  var url = Uri.parse("${baseUrl}sarees");
+
+  final res = await http.get(url);
+
+  if (res.statusCode == 200) {
+    return jsonDecode(res.body);
+  } else {
+    throw Exception('Failed to load sarees');
+  }
+}
+
+
+  // GET API for fetch all sarees
+
+  Future<List<dynamic>> fetchKids() async {
+
+  var url = Uri.parse("${baseUrl}kids");
+
+  final res = await http.get(url);
+
+  if (res.statusCode == 200) {
+    return jsonDecode(res.body);
+  } else {
+    throw Exception('Failed to load kids');
+  }
+}
 
 
 }

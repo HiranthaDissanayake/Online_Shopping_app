@@ -1,17 +1,29 @@
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:online_shopping_app/Provider/cartProvider.dart';
+import 'package:provider/provider.dart';
 import 'package:online_shopping_app/components/bottomNavBar.dart';
-import 'package:online_shopping_app/pages/home.dart';
-import 'package:online_shopping_app/pages/login.dart';
 
-void main() => runApp(
-  DevicePreview(
-    enabled: !kReleaseMode,
-    builder: (context) => MyApp(), // Wrap your app
-  ),
-);
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  Stripe.publishableKey = "pk_test_51QOMw0LI2fV9th4cJzazszhixLRe8EkTUuUmEzeZEpbFdFN1SQGPQhID9NoZT4WkuY85RGfm9NIhPxkDeMgMmgKk00sVU5rGeP"; 
+  runApp(
+    DevicePreview(
+      enabled: !kReleaseMode,
+      builder: (context) => MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (context) => CartProvider()),
+        ],
+        child: MyApp(),
+      ),
+    ),
+  );
+}
+
+
 class MyApp extends StatelessWidget {
    const MyApp({super.key});
 
@@ -30,7 +42,7 @@ class MyApp extends StatelessWidget {
       bodyMedium: GoogleFonts.poppins(textStyle: textTheme.bodyMedium,),
     ),
   ),
-  home: Login() ,
+  home: Bottomnavbar(),
 );
   }
 }

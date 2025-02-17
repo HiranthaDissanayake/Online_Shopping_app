@@ -21,24 +21,21 @@ class _CategoryOptionState extends State<CategoryOption> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: (){},
-      child: Card(
-        elevation: 3,
-        child: Container(
-          width: 100,
-          height: 100,
-          decoration: BoxDecoration(
-            color: Color.fromARGB(255, 247, 235, 226),
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.asset(widget.imgUrl, width: 50),
-              Text(widget.title),
-            ],
-          ),
+    return Card(
+      elevation: 3,
+      child: Container(
+        width: 100,
+        height: 100,
+        decoration: BoxDecoration(
+          color: Color.fromARGB(255, 247, 235, 226),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(widget.imgUrl, width: 50),
+            Text(widget.title),
+          ],
         ),
       ),
     );

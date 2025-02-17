@@ -72,3 +72,54 @@ app.post("/api/login", (req, res) => {
       }
     });
   });
+
+
+  //GET API to all blouses
+  app.get('/api/blouses', (req, res) => {
+    const sql = "SELECT * FROM blouses";
+    db.query(sql, (err, results) => {
+        if (err) {
+            res.status(500).json({ error: err.message });
+            return;
+        }
+        res.status(200).json(results);
+    });
+});
+
+
+  //GET API to all frocks
+  app.get('/api/frocks', (req, res) => {
+    const sql = "SELECT * FROM frocks";
+    db.query(sql, (err, results) => {
+        if (err) {
+            res.status(500).json({ error: err.message });
+            return;
+        }
+        res.status(200).json(results);
+    });
+});
+
+  //GET API to all sarees
+  app.get('/api/sarees', (req, res) => {
+    const sql = "SELECT * FROM sarees";
+    db.query(sql, (err, results) => {
+        if (err) {
+            res.status(500).json({ error: err.message });
+            return;
+        }
+        res.status(200).json(results);
+    });
+});
+
+
+  //GET API to all kids
+  app.get('/api/kids', (req, res) => {
+    const sql = "SELECT * FROM kids";
+    db.query(sql, (err, results) => {
+        if (err) {
+            res.status(500).json({ error: err.message });
+            return;
+        }
+        res.status(200).json(results);
+    });
+});
