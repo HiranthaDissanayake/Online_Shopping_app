@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:online_shopping_app/Services/Api.dart';
 import 'package:online_shopping_app/components/category_option.dart';
+import 'package:online_shopping_app/pages/cartPage.dart';
 import 'package:online_shopping_app/pages/categories/all_products.dart';
 import 'package:online_shopping_app/pages/categories/blouses_page.dart';
 import 'package:online_shopping_app/pages/categories/frocks_page.dart';
@@ -57,7 +58,10 @@ class _HomeState extends State<Home> {
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => CartPage()));
+                    },
                     icon: Icon(
                       Icons.shopping_bag_outlined,
                       color: Colors.white,
@@ -67,20 +71,20 @@ class _HomeState extends State<Home> {
                 )
               ]),
               SizedBox(
-                height: 30,
+                height: 20,
               ),
               Stack(
                 children: [
                   Container(
                     width: double.infinity,
-                    height: 200,
+                    height: 180,
                     decoration: BoxDecoration(
                       color: Color(0xFFFF6F00),
                       borderRadius: BorderRadius.circular(30),
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(left: 30),
+                    padding: const EdgeInsets.only(left: 23),
                     child: Row(
                       children: [
                         Column(children: [
@@ -91,19 +95,19 @@ class _HomeState extends State<Home> {
                               Text(
                                 "Best Prices",
                                 style: TextStyle(
-                                    fontSize: 25,
+                                    fontSize: 23,
                                     fontWeight: FontWeight.bold,
                                     color: Colors.black),
                               ),
                               Text(
                                 "For This April",
                                 style: TextStyle(
-                                    fontSize: 22,
+                                    fontSize: 20,
                                     fontWeight: FontWeight.bold,
                                     color: Colors.black),
                               ),
                               SizedBox(
-                                height: 20,
+                                height: 10,
                               ),
                               Container(
                                 width: 120,
@@ -129,8 +133,8 @@ class _HomeState extends State<Home> {
                           child: Image.asset(
                             "assets/Images/image1.png",
                             fit: BoxFit.cover,
-                            width: MediaQuery.of(context).size.width * 0.48,
-                            height: 220,
+                            width: MediaQuery.of(context).size.width * 0.47,
+                            height: 190,
                           ),
                         )
                       ],
@@ -258,23 +262,134 @@ class _HomeState extends State<Home> {
                               child: Text('Error: ${snapshot.error}'));
                         } else if (!snapshot.hasData ||
                             snapshot.data!.isEmpty) {
-                          return Center(child: Text('No blouses available'));
+                          return Center(child: Text('No new arrivals available'));
                         }
 
-                        return ListView.builder(
-                          itemCount: snapshot.data!.length,
-                          itemBuilder: (context, index){
+                        return PageView.builder(
+                            itemCount: snapshot.data!.length,
+                            controller: _pageController,
+                            onPageChanged: (index) {
+                              Future.delayed(Duration(seconds: 2), () {
+                                if (index < snapshot.data!.length - 1) {
+                                  _pageController.nextPage(
+                                      duration: Duration(seconds: 1),
+                                      curve: Curves.easeInOut);
+                                } else {
+                                  _pageController.jumpToPage(0);
+                                }
+                              });
+                            },
+                            itemBuilder: (context, index) {
+                              var newItem = snapshot.data![index];
 
-                            var newItem = snapshot.data![index];
-
-                            return ListTile(
-                              title: Text(newItem['name']),
-                              subtitle: Text(newItem['price']),
-                            );
-
-                          }
-                          
-                           );
+                              return GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => Item(
+                                                item: newItem,
+                                              )));
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.only(bottom: 25),
+                                  child: AnimatedContainer(
+                                    duration: Duration(seconds: 5),
+                                    margin:
+                                        EdgeInsets.symmetric(horizontal: 10),
+                                    decoration: BoxDecoration(
+                                      color: Colors.deepOrange,
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                    child: Stack(
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Center(
+                                            child: ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(20),
+                                              child: SizedBox(
+                                                width: 150,
+                                                child: Image.network(
+                                                  newItem['imageUrl'],
+                                                  width: 200,
+                                                  fit: BoxFit
+                                                      .cover, 
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.all(10),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.end,
+                                                children: [
+                                                  Container(
+                                                      height: 50,
+                                                      width: 65,
+                                                      decoration: BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(10),
+                                                          color: Colors.white),
+                                                      child: Center(
+                                                          child: Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(8.0),
+                                                        child: Text(
+                                                          newItem['name'],
+                                                          style: TextStyle(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              fontSize: 11,
+                                                              color:
+                                                                  Colors.black),
+                                                        ),
+                                                      ))),
+                                                ],
+                                              ),
+                                              Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                children: [
+                                                  Container(
+                                                      height: 40,
+                                                      width: 60,
+                                                      decoration: BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(20),
+                                                          color: Colors.black),
+                                                      child: Center(
+                                                          child: Text(
+                                                        'Rs. ${newItem['price']}',
+                                                        style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontSize: 12,
+                                                            color:
+                                                                Colors.white),
+                                                      ))),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              );
+                            });
                       })),
             ],
           ),
@@ -283,23 +398,3 @@ class _HomeState extends State<Home> {
     );
   }
 }
-
-//  PageView.builder(
-//                 itemCount: 10,
-//                 controller: _pageController,
-//                 onPageChanged: (index) {
-//                   Future.delayed(Duration(seconds: 2), () {
-//                     if (index < 9) {
-//                       _pageController.nextPage(duration: Duration(seconds: 1), curve: Curves.easeInOut);
-//                     } else {
-//                       _pageController.jumpToPage(0);
-//                     }
-//                   });
-//                 },
-//                 itemBuilder: (context, index) {
-//                   return Padding(
-//                     padding: const EdgeInsets.only(bottom: 30),
-//                     child: NewArrivalsItemCard(),
-//                   );
-//                 },
-//               ),

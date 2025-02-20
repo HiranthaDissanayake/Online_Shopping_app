@@ -24,8 +24,8 @@ class _CategoryOptionState extends State<CategoryOption> {
     return Card(
       elevation: 3,
       child: Container(
-        width: 100,
-        height: 100,
+        width: 90,
+        height: 90,
         decoration: BoxDecoration(
           color: Color.fromARGB(255, 247, 235, 226),
           borderRadius: BorderRadius.circular(10),
@@ -33,8 +33,8 @@ class _CategoryOptionState extends State<CategoryOption> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset(widget.imgUrl, width: 50),
-            Text(widget.title),
+            Image.asset(widget.imgUrl, width: 45),
+            Text(widget.title, style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),),
           ],
         ),
       ),

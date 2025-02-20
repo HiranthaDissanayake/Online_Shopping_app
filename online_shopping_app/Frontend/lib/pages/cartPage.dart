@@ -79,7 +79,7 @@ class CartPage extends StatelessWidget {
                             ),
                           ),
                           Positioned(
-                            top: 5,
+                            top: 2,
                             right: 10,
                             child: ElevatedButton(
                               onPressed: () async {

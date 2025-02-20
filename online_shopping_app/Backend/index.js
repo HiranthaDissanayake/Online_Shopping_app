@@ -148,10 +148,18 @@ app.get("/api/products", (req, res) => {
 
 // API endpoint to fetch new arrivals
 app.get("/api/new_arrivals", (req, res) => {
-  const query = `SELECT *
-FROM frocks
-WHERE DATE(added_date) = CURDATE()
-ORDER BY added_date DESC`;
+  const query = `SELECT * 
+  FROM frocks 
+  WHERE added_date >= DATE_SUB(CURDATE(), INTERVAL 7 DAY) 
+  UNION ALL
+  SELECT * FROM blouses
+  WHERE added_date >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)
+  UNION ALL
+  SELECT * FROM kids 
+  WHERE added_date >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)
+  
+  ORDER BY added_date DESC`;
+  
 
   db.query(query , (err, result) => {
     if (err){
