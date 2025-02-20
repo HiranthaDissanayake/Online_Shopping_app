@@ -4,7 +4,7 @@
 
 ## Overview
 
-**Red Dress** is a modern and user-friendly online shopping app built using **Flutter**. It provides customers with a seamless shopping experience, allowing them to browse products, add items to their cart, place orders, and track deliveries with ease.
+**Red Dress** is a modern and user-friendly online shopping app built using **Flutter**. It provides customers with a seamless shopping experience, allowing them to browse products, add items to their cart, place orders.
 
 ## Features
 
