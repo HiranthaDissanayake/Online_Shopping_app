@@ -90,7 +90,7 @@ class _FrockspageState extends State<Frockspage> {
                     crossAxisCount: 2, // Two items in a row
                     crossAxisSpacing: 10, // Spacing between columns
                     mainAxisSpacing: 10, // Spacing between rows
-                    childAspectRatio: 0.8, // Adjusts height of grid items
+                    childAspectRatio: 0.6, // Adjusts height of grid items
                   ),
                   itemCount: snapshot.data!.length,
                   itemBuilder: (context, index) {

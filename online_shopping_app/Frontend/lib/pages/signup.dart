@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:online_shopping_app/Services/Api.dart';
-import 'package:online_shopping_app/components/bottomNavBar.dart';
 import 'package:online_shopping_app/pages/login.dart';
 
 class SignUp extends StatefulWidget {
@@ -152,6 +150,7 @@ class _SignUpState extends State<SignUp> {
                         onPressed: (){
                           if(_formkey.currentState!.validate()){
 
+                            // ignore: non_constant_identifier_names
                             var Data = {
                               "name" : _usernameController.text,
                               "email" : _emailController.text,

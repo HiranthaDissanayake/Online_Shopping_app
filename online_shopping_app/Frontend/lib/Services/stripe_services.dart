@@ -34,7 +34,7 @@ class StripePaymentService {
       final paymentIntent = await createPaymentIntent(amount);
       if (paymentIntent == null) return false;
 
-      // ✅ Step 1: Initialize the Payment Sheet
+      // Initialize the Payment Sheet
       await Stripe.instance.initPaymentSheet(
         paymentSheetParameters: SetupPaymentSheetParameters(
           paymentIntentClientSecret: paymentIntent["client_secret"],
@@ -43,7 +43,7 @@ class StripePaymentService {
         ),
       );
 
-      // ✅ Step 2: Display the Payment Sheet
+      // Display the Payment Sheet
       await Stripe.instance.presentPaymentSheet();
 
       print("Payment successful!");

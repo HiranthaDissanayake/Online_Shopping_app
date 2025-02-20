@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:online_shopping_app/Models/userModel.dart';
 import 'package:online_shopping_app/Services/Api.dart';
-import 'package:online_shopping_app/components/bottomNavBar.dart';
 import 'package:online_shopping_app/pages/signup.dart';
 
+// ignore: must_be_immutable
 class Login extends StatefulWidget {
   String userName;
    Login({
@@ -79,6 +77,7 @@ class _LoginState extends State<Login> {
                             if (!value.contains("@gmail.com")){
                               return "Please enter valid email";
                             }
+                            return null;
                           },
                           decoration: InputDecoration(
                               border: OutlineInputBorder(
@@ -98,6 +97,7 @@ class _LoginState extends State<Login> {
                             if(value!.isEmpty) {
                               return "Please enter password";
                             }
+                            return null;
                           },
                           obscureText: hidePassword ? true : false,
                           decoration: InputDecoration(

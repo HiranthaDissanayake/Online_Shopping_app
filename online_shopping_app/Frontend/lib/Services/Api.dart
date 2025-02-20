@@ -1,13 +1,11 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:online_shopping_app/Models/userModel.dart';
 import 'package:online_shopping_app/components/bottomNavBar.dart';
-import 'package:online_shopping_app/pages/home.dart';
 
 class Api {
 
-  static const baseUrl = "http://192.168.21.38:5001/api/";
+  static const baseUrl = "http://192.168.165.38:5001/api/";
 
   // POST API for register user
 
@@ -163,6 +161,38 @@ class Api {
   } else {
     throw Exception('Failed to load kids');
   }
+}
+
+
+// GET API for fetch all products
+
+Future<List<dynamic>> fetchProducts() async {
+  var url = Uri.parse("${baseUrl}products");
+
+  final res = await http.get(url);
+
+  if(res.statusCode == 200){
+    return jsonDecode(res.body);
+  }else{
+    throw Exception(res.statusCode);
+  }    
+}
+
+
+// GET API for fetch new arrivals
+
+Future<List<dynamic>> fetchNewArrivals() async {
+
+  var url = Uri.parse("${baseUrl}new_arrivals");
+
+  final res = await http.get(url);
+
+  if(res.statusCode == 200){
+    return jsonDecode(res.body);
+  }else{
+    throw Exception(res.statusCode);
+  }
+
 }
 
 

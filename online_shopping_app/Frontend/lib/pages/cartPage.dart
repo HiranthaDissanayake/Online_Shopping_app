@@ -4,6 +4,8 @@ import 'package:provider/provider.dart';
 import 'package:online_shopping_app/Provider/cartProvider.dart';
 
 class CartPage extends StatelessWidget {
+  const CartPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     final cartProvider = Provider.of<CartProvider>(context);
@@ -32,7 +34,7 @@ class CartPage extends StatelessWidget {
                         subtitle:
                             Text("Rs. ${item["price"]} x ${item["quantity"]}"),
                         trailing: IconButton(
-                          icon: Icon(Icons.delete, color: Colors.red),
+                          icon: Icon(Icons.remove_shopping_cart_outlined, color: Colors.red),
                           onPressed: () {
                             cartProvider.removeFromCart(index);
                           },
@@ -89,7 +91,6 @@ class CartPage extends StatelessWidget {
                                       SnackBar(
                                           content:
                                               Text("Payment Successful!")));
-                                  Navigator.pop(context);
                                 } else {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(

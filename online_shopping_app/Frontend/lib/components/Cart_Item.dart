@@ -68,7 +68,7 @@ class _CartItemState extends State<CartItem> {
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(right: 20),
-                    child: Text("Rs. " +widget.price.toString(), style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),),
+                    child: Text("Rs. ${widget.price}", style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),),
                   ),
       
                   SizedBox(

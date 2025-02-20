@@ -8,9 +8,13 @@ import 'package:provider/provider.dart';
 import 'package:online_shopping_app/components/bottomNavBar.dart';
 
 void main() {
+
+  // initialized Stripe 
   WidgetsFlutterBinding.ensureInitialized();
   Stripe.publishableKey = "pk_test_51QOMw0LI2fV9th4cJzazszhixLRe8EkTUuUmEzeZEpbFdFN1SQGPQhID9NoZT4WkuY85RGfm9NIhPxkDeMgMmgKk00sVU5rGeP"; 
   runApp(
+
+    // Device Preview 
     DevicePreview(
       enabled: !kReleaseMode,
       builder: (context) => MultiProvider(

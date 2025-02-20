@@ -273,78 +273,49 @@ class _ItemState extends State<Item> {
             SizedBox(
               height: 50,
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                SizedBox(
-                  width: 170,
-                  height: 50,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.deepOrange,
+            SizedBox(
+              width: double.infinity,
+              height: 50,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.deepOrange,
+                ),
+                onPressed: () {
+                  print("Current Count: $_count");
+                  Provider.of<CartProvider>(context, listen: false).addToCart({
+                    "name": widget.item["name"],
+                    "price": widget.item["price"],
+                    "imageUrl": widget.item["imageUrl"],
+                    "quantity": _count,
+                  });
+            
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text("Added to Cart!"),
+                      duration: Duration(seconds: 5),
                     ),
-                    onPressed: () {
-                      print("Current Count: $_count");
-                      Provider.of<CartProvider>(context, listen: false).addToCart({
-                        "name": widget.item["name"],
-                        "price": widget.item["price"],
-                        "imageUrl": widget.item["imageUrl"],
-                        "quantity": _count,
-                      });
-
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text("Added to Cart!"),
-                          duration: Duration(seconds: 5),
-                        ),
-                      );
-                    },
-                    child: Center(
-                      child: Row(
-                        children: [
-                          Text(
-                            "Add To Cart",
-                            style: TextStyle(fontSize: 17, color: Colors.white),
-                          ),
-                          Spacer(),
-                          Icon(
-                            Icons.add_shopping_cart_outlined,
-                            color: Colors.white,
-                            size: 23,
-                          )
-                        ],
+                  );
+                },
+                child: Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Add To Cart",
+                        style: TextStyle(fontSize: 17, color: Colors.white),
                       ),
-                    ),
+                      SizedBox(
+                        width: 20,
+                      ),
+                      Icon(
+                        Icons.add_shopping_cart_outlined,
+                        color: Colors.white,
+                        size: 23,
+                      )
+                    ],
                   ),
                 ),
-                SizedBox(
-                  width: 170,
-                  height: 50,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.deepOrange,
-                    ),
-                    onPressed: () {},
-                    child: Center(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            "Buy Now",
-                            style: TextStyle(fontSize: 17, color: Colors.white),
-                          ),
-                          SizedBox(width: 8),
-                          Icon(
-                            Icons.payment,
-                            color: Colors.white,
-                            size: 23,
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ],
+              ),
             )
           ],
         ),
