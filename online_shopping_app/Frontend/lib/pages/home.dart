@@ -6,6 +6,7 @@ import 'package:online_shopping_app/pages/categories/all_products.dart';
 import 'package:online_shopping_app/pages/categories/blouses_page.dart';
 import 'package:online_shopping_app/pages/categories/frocks_page.dart';
 import 'package:online_shopping_app/pages/categories/kids_page.dart';
+import 'package:online_shopping_app/pages/categories/new_arrivals.dart';
 import 'package:online_shopping_app/pages/categories/saree_page.dart';
 import 'package:online_shopping_app/pages/item.dart';
 
@@ -240,9 +241,14 @@ class _HomeState extends State<Home> {
                     "New Arrivals",
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
-                  Text(
-                    "see all",
-                    style: TextStyle(fontSize: 15, color: Colors.deepOrange),
+                  GestureDetector(
+                    onTap: (){
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=> NewArrivals()));
+                    },
+                    child: Text(
+                      "see all",
+                      style: TextStyle(fontSize: 15, color: Colors.deepOrange),
+                    ),
                   ),
                 ],
               ),

@@ -15,8 +15,9 @@ class _AllProductsPageState extends State<AllProductsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.deepOrange,
         centerTitle: true,
-        title: Text('All Products',style: TextStyle(fontWeight: FontWeight.bold),),
+        title: Text('All Products',style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),),
       ),
       body: FutureBuilder<List<dynamic>>(
         future: Api().fetchProducts(),

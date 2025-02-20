@@ -154,9 +154,6 @@ app.get("/api/new_arrivals", (req, res) => {
   UNION ALL
   SELECT * FROM blouses
   WHERE added_date >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)
-  UNION ALL
-  SELECT * FROM kids 
-  WHERE added_date >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)
   
   ORDER BY added_date DESC`;
   
