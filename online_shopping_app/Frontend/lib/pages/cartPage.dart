@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:online_shopping_app/Services/stripe_services.dart';
+import 'package:online_shopping_app/pages/order_details.dart';
 import 'package:provider/provider.dart';
 import 'package:online_shopping_app/Provider/cartProvider.dart';
 
@@ -84,22 +85,11 @@ class CartPage extends StatelessWidget {
                             right: 10,
                             child: ElevatedButton(
                               onPressed: () async {
-                                bool paymentSuccess =
-                                    await StripePaymentService.processPayment(
-                                        cartProvider.totalPrice);
-                                if (paymentSuccess) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                          content:
-                                              Text("Payment Successful!")));
-                                } else {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                          content: Text("Payment Failed!")));
-                                }
+                                Navigator.push(context, MaterialPageRoute(builder: (context)=> OrderDetails()));
+
                               },
                               child: Text(
-                                "Checkout",
+                                "Buy Now",
                                 style: TextStyle(
                                     color: Colors.deepOrange,
                                     fontSize: 18,

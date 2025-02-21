@@ -160,6 +160,7 @@ class _SignUpState extends State<SignUp> {
                             // Pass the Data map to Api 
                             Api.registerUser(Data, context);
 
+                            // Navigate to Login page
                             Navigator.push(context, MaterialPageRoute(builder: (context) => Login(userName: _usernameController.text)));
                           }
                           
