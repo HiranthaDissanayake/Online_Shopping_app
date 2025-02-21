@@ -196,4 +196,33 @@ Future<List<dynamic>> fetchNewArrivals() async {
 }
 
 
+// POST API for store order details
+
+static Future storeOrder(Map<String, dynamic> orderDetails , BuildContext context) async {
+
+  var url = Uri.parse("${baseUrl}orders");
+
+  final res = await http.post(
+    url,
+    headers: {"content-Type" : "application/json"},
+    body: jsonEncode(orderDetails),
+  );
+
+  if(res.statusCode == 200){
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text("Order Saved"),
+        duration: Duration(seconds: 3),
+      )
+    );
+  }else{
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text("Order Not Saved , Try Again"),
+        duration: Duration(seconds: 3),
+      ),
+    );
+  }
+}
+
 }

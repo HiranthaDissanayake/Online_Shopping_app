@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:online_shopping_app/Provider/cartProvider.dart';
+import 'package:online_shopping_app/Services/Api.dart';
 import 'package:online_shopping_app/Services/stripe_services.dart';
 import 'package:provider/provider.dart';
 
@@ -18,7 +19,6 @@ class _OrderDetailsState extends State<OrderDetails> {
   final TextEditingController _contactController = TextEditingController();
   final TextEditingController _cityController = TextEditingController();
   final TextEditingController _zipCodeController = TextEditingController();
-
   final _formkey = GlobalKey<FormState>();
 
   @override
@@ -27,10 +27,11 @@ class _OrderDetailsState extends State<OrderDetails> {
 
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.deepOrange,
         centerTitle: true,
         title: Text(
           "Customer Details",
-          style: TextStyle(fontWeight: FontWeight.bold),
+          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
         ),
       ),
       body: SingleChildScrollView(
@@ -85,11 +86,11 @@ class _OrderDetailsState extends State<OrderDetails> {
                           if (value == null || value.isEmpty) {
                             return 'Please enter contact number';
                           }
-        
+
                           if (value.length != 10) {
                             return 'Please enter valid contact number';
                           }
-        
+
                           return null;
                         },
                         decoration: InputDecoration(
@@ -112,7 +113,8 @@ class _OrderDetailsState extends State<OrderDetails> {
                                 return null;
                               },
                               decoration: InputDecoration(
-                                  border: OutlineInputBorder(), hintText: "City"),
+                                  border: OutlineInputBorder(),
+                                  hintText: "City"),
                               keyboardType: TextInputType.text,
                             ),
                           ),
@@ -136,7 +138,34 @@ class _OrderDetailsState extends State<OrderDetails> {
                           ),
                         ),
                       ],
-                    )
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 30),
+                      child: Text(
+                        "Items Price : Rs. ${cartProvider.totalPrice}",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                            fontSize: 16),
+                      ),
+                    ),
+                    Text(
+                      "Delivery Charges : Rs. 300",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                          fontSize: 16),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        "Total Price : Rs. ${cartProvider.totalPrice + 300}",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.deepOrange,
+                            fontSize: 17),
+                      ),
+                    ),
                   ],
                 ),
                 Padding(
@@ -147,9 +176,28 @@ class _OrderDetailsState extends State<OrderDetails> {
                         bool paymentSuccess =
                             await StripePaymentService.processPayment(
                                 cartProvider.totalPrice);
+
                         if (paymentSuccess) {
+
+                          // create map to store delivery details
+                          var deleveryDetails = {
+                            "name": _nameController.text,
+                            "address": _addressController.text,
+                            "phone": _contactController.text,
+                            "city": _cityController.text,
+                            "zip": _zipCodeController.text,
+                            "price": cartProvider.totalPrice + 300,
+                          };
+
+                          // pass the delivery details to api
+                          Api.storeOrder(deleveryDetails, context);
+
+
                           ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text("Payment Successful!")));
+                              SnackBar(
+                                content: Text("Payment Successful!"),
+                                backgroundColor: Colors.green,
+                                ));
                         } else {
                           ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(content: Text("Payment Failed!")));
@@ -157,7 +205,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                       }
                     },
                     child: Container(
-                      margin: EdgeInsets.only(top: 90),
+                      margin: EdgeInsets.only(top: 20),
                       width: double.infinity,
                       height: 50,
                       decoration: BoxDecoration(
@@ -175,8 +223,8 @@ class _OrderDetailsState extends State<OrderDetails> {
                           ),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child:
-                                Icon(Icons.payment_outlined, color: Colors.white),
+                            child: Icon(Icons.payment_outlined,
+                                color: Colors.white),
                           )
                         ],
                       ),

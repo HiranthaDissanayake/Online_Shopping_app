@@ -166,3 +166,21 @@ app.get("/api/new_arrivals", (req, res) => {
     res.status(200).json(result);
   })
 });
+
+
+// API endpoint to post orders
+app.post("/api/orders", (req, res) =>{
+  const {name , address, phone, city, zip, price} = req.body;
+
+  const sql = "INSERT INTO orders (customerName, address, phone, city, zip, price) VALUES (?, ?, ?, ?, ?, ?)";
+
+  db.query(sql, [name, address, phone, city, zip, price], (err, result) => {
+    if(err){
+      console.error("Error executing query:", err);
+      return res.status(500).json({ error: "Failed to post orders" });
+    } else {
+      res.status(200).json({ message: "Order placed successfully" });
+    }
+  });
+
+});
