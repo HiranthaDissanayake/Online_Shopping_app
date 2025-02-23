@@ -61,8 +61,9 @@ app.post("/api/login", (req, res) => {
     }
 
     if (result.length > 0) {
+      
       // User found
-      res.status(200).json({ message: "Login successful", user: result[0] });
+      res.status(200).json({ message: "Login successful", user: result[0].email });
     } else {
       // User not found
       res.status(401).json({ message: "Invalid email or password" });
@@ -169,18 +170,93 @@ app.get("/api/new_arrivals", (req, res) => {
 
 
 // API endpoint to post orders
-app.post("/api/orders", (req, res) =>{
-  const {name , address, phone, city, zip, price} = req.body;
+app.post("/api/orders", (req, res) => {
+  const { name, address, phone, email, city, zip, price } = req.body;
 
-  const sql = "INSERT INTO orders (customerName, address, phone, city, zip, price) VALUES (?, ?, ?, ?, ?, ?)";
+  // Get the user ID based on the email
+  const getUserIdSql = "SELECT id FROM users WHERE email = ?";
 
-  db.query(sql, [name, address, phone, city, zip, price], (err, result) => {
-    if(err){
-      console.error("Error executing query:", err);
-      return res.status(500).json({ error: "Failed to post orders" });
-    } else {
-      res.status(200).json({ message: "Order placed successfully" });
+  db.query(getUserIdSql, [email], (err, result) => {
+    if (err) {
+      console.error("Error finding user ID:", err);
+      return res.status(500).json({ error: "Failed to find user" });
     }
-  });
+    
+    if (result.length == 0) {
+      return res.status(404).json({ error: "User not found" });
+    }
 
+    const userId = result[0].id;
+
+    // Insert order with user_id
+    const insertOrderSql = `
+      INSERT INTO orders (customerName, address, phone, email, city, zip, price, user_id) 
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
+
+    db.query(insertOrderSql, [name, address, phone, email, city, zip, price, userId], (err, result) => {
+      if (err) {
+        console.error("Error inserting order:", err);
+        return res.status(500).json({ error: "Failed to place order" });
+      }
+      res.status(200).json({ message: "Order placed successfull1y" });
+    });
+  });
 });
+
+
+
+// API endpoint to fetch orders by user_id
+app.get("/api/userOrders/:user_id", (req, res) => {
+  const userId = req.params.user_id; // Ensure we get user_id
+
+  console.log("Fetching orders for user_id:", userId); // Debugging log
+
+  const sql = `
+    SELECT orders.id AS order_id, orders.customerName, orders.address, 
+           orders.phone, orders.email, orders.city, orders.zip, orders.price, orders.orderPlacedDate,
+           users.username, users.email
+    FROM orders
+    JOIN users ON users.id = orders.user_id
+    WHERE users.id = ?`;
+
+  db.query(sql, [userId], (err, result) => {
+    if (err) {
+      console.error("Error fetching user orders:", err);
+      return res.status(500).json({ error: "Failed to fetch orders" });
+    }
+
+    if (result.length === 0) {
+      console.log("No orders found for user:", userId); // Debugging
+    }
+
+    res.status(200).json(result);
+  });
+});
+
+
+// API endpoint to fetch all orders
+
+app.get("/api/users/email/:email", (req, res) => {
+  const email = req.params.email;
+
+  console.log("Fetching user ID for email:", email); // Debugging log
+
+  const sql = "SELECT id FROM users WHERE email = ? LIMIT 1";
+
+  db.query(sql, [email], (err, result) => {
+    if (err) {
+      console.error("Error fetching user ID:", err);
+      return res.status(500).json({ error: "Failed to fetch user ID" });
+    }
+
+    if (result.length === 0) {
+      console.log("User not found for email:", email);
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    res.status(200).json({ id: result[0].id }); //Return as JSON object
+  });
+});
+
+
+

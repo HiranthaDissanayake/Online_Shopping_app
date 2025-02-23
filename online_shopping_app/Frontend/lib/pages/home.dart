@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:online_shopping_app/Services/Api.dart';
 import 'package:online_shopping_app/components/category_option.dart';
-import 'package:online_shopping_app/pages/cartPage.dart';
 import 'package:online_shopping_app/pages/categories/all_products.dart';
 import 'package:online_shopping_app/pages/categories/blouses_page.dart';
 import 'package:online_shopping_app/pages/categories/frocks_page.dart';
@@ -9,9 +8,14 @@ import 'package:online_shopping_app/pages/categories/kids_page.dart';
 import 'package:online_shopping_app/pages/categories/new_arrivals.dart';
 import 'package:online_shopping_app/pages/categories/saree_page.dart';
 import 'package:online_shopping_app/pages/item.dart';
+import 'package:online_shopping_app/pages/orders.dart';
 
 class Home extends StatefulWidget {
-  const Home({super.key});
+  String? email;
+  Home({
+    super.key,
+    required this.email,
+  });
 
   @override
   State<Home> createState() => _HomeState();
@@ -59,9 +63,20 @@ class _HomeState extends State<Home> {
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: IconButton(
-                    onPressed: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => CartPage()));
+                    onPressed: () async {
+                      try {
+                        String id = await Api().fetchUserId(
+                            widget.email.toString()); // Await the Future
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => Orders(userId: id)));
+
+                      } catch (e) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text(e.toString())),
+                        );
+                      }
                     },
                     icon: Icon(
                       Icons.shopping_bag_outlined,
@@ -242,8 +257,11 @@ class _HomeState extends State<Home> {
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                   GestureDetector(
-                    onTap: (){
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=> NewArrivals()));
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => NewArrivals()));
                     },
                     child: Text(
                       "see all",
@@ -268,7 +286,8 @@ class _HomeState extends State<Home> {
                               child: Text('Error: ${snapshot.error}'));
                         } else if (!snapshot.hasData ||
                             snapshot.data!.isEmpty) {
-                          return Center(child: Text('No new arrivals available'));
+                          return Center(
+                              child: Text('No new arrivals available'));
                         }
 
                         return PageView.builder(
@@ -320,8 +339,7 @@ class _HomeState extends State<Home> {
                                                 child: Image.network(
                                                   newItem['imageUrl'],
                                                   width: 200,
-                                                  fit: BoxFit
-                                                      .cover, 
+                                                  fit: BoxFit.cover,
                                                 ),
                                               ),
                                             ),

@@ -12,6 +12,7 @@ class CartPage extends StatelessWidget {
     final cartProvider = Provider.of<CartProvider>(context);
 
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.deepOrange,
         centerTitle: true,

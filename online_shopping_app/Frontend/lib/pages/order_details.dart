@@ -17,6 +17,7 @@ class _OrderDetailsState extends State<OrderDetails> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _addressController = TextEditingController();
   final TextEditingController _contactController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
   final TextEditingController _cityController = TextEditingController();
   final TextEditingController _zipCodeController = TextEditingController();
   final _formkey = GlobalKey<FormState>();
@@ -96,6 +97,24 @@ class _OrderDetailsState extends State<OrderDetails> {
                         decoration: InputDecoration(
                             border: OutlineInputBorder(),
                             hintText: "Contact Number"),
+                        keyboardType: TextInputType.phone,
+                      ),
+                    ),
+
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextFormField(
+                        controller: _emailController,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter email address';
+                          }
+
+                          return null;
+                        },
+                        decoration: InputDecoration(
+                            border: OutlineInputBorder(),
+                            hintText: "Email address"),
                         keyboardType: TextInputType.phone,
                       ),
                     ),
@@ -184,6 +203,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                             "name": _nameController.text,
                             "address": _addressController.text,
                             "phone": _contactController.text,
+                            "email": _emailController.text,
                             "city": _cityController.text,
                             "zip": _zipCodeController.text,
                             "price": cartProvider.totalPrice + 300,

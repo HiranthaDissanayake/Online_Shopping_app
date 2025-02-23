@@ -5,7 +5,13 @@ import 'package:online_shopping_app/pages/home.dart';
 import 'package:online_shopping_app/pages/profile.dart';
 
 class Bottomnavbar extends StatefulWidget {
-  const Bottomnavbar({super.key});
+
+  String? userID;
+
+   Bottomnavbar({
+    super.key,
+    required this.userID
+    });
 
   @override
   State<Bottomnavbar> createState() => _BottomnavbarState();
@@ -16,7 +22,7 @@ class _BottomnavbarState extends State<Bottomnavbar> {
   int currentTabIndex = 0;
 
   late List<Widget> pages = [
-    Home(),
+    Home(email: widget.userID.toString(),),
     CartPage(),
     Profile()
   ];

@@ -16,7 +16,6 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
 
-  bool isApiCallProccess = false;
   bool hidePassword = true;
 
   final TextEditingController _emailController = TextEditingController();
