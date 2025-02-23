@@ -10,6 +10,7 @@ import 'package:online_shopping_app/pages/categories/saree_page.dart';
 import 'package:online_shopping_app/pages/item.dart';
 import 'package:online_shopping_app/pages/orders.dart';
 
+// ignore: must_be_immutable
 class Home extends StatefulWidget {
   String? email;
   Home({

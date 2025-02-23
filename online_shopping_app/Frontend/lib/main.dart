@@ -60,7 +60,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:online_shopping_app/Provider/cartProvider.dart';
 import 'package:online_shopping_app/pages/signup.dart';
 import 'package:provider/provider.dart';
-import 'package:online_shopping_app/components/bottomNavBar.dart';
 
 void main() {
   // Initialize Stripe

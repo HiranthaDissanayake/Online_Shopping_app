@@ -113,9 +113,11 @@ class _OrderDetailsState extends State<OrderDetails> {
                           return null;
                         },
                         decoration: InputDecoration(
+                            helperText: "*Please enter email address only that you use to login",
+                            helperStyle: TextStyle(fontSize: 13,color: Colors.red),
                             border: OutlineInputBorder(),
                             hintText: "Email address"),
-                        keyboardType: TextInputType.phone,
+                        keyboardType: TextInputType.text,
                       ),
                     ),
                     Row(

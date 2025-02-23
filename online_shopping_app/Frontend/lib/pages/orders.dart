@@ -45,36 +45,39 @@ class Orders extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text("Order ID: ${order['order_id']}", style: TextStyle(fontSize: 16, color: Colors.black),),
-                            Text("Customer Name: ${order['customerName']}", style: TextStyle(fontSize: 16, color: Colors.black),),
-                            Text("Contact Number: ${order['phone']}", style: TextStyle(fontSize: 16, color: Colors.black,fontWeight: FontWeight.bold),),  
-                            Text("Order Date: ${order['orderPlacedDate']}", style: TextStyle(fontSize: 14, color: Colors.black),),
-                            Text("Address: ${order['address']}", style: TextStyle(fontSize: 16, color: Colors.black,fontWeight: FontWeight.bold),),
-
-                            Padding(
-                            padding: const EdgeInsets.only(top: 10, bottom: 10),
-                            child: Row(
-                              children: [
-                                
-                                Padding(
-                                  padding: const EdgeInsets.all(2.0),
-                                  child: Icon(Icons.done_outline_rounded, color: Colors.green,),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(2),
-                                  child: Text("Paid -", style: TextStyle(fontSize: 18,color: Colors.green,fontWeight: FontWeight.bold),),
-                                ),
-                                SizedBox(
-                                  width: 5,
-                                ),
-                                Text("RS. ${order['price']}", style: TextStyle(fontSize: 17, color: Colors.black,fontWeight: FontWeight.bold),),
-                              ],
-                            ),
-                        ),
-                          ],
+                        Padding(
+                          padding: const EdgeInsets.only(left: 20),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text("Order ID: ${order['order_id']}", style: TextStyle(fontSize: 16, color: Colors.black),),
+                              Text("Customer Name: ${order['customerName']}", style: TextStyle(fontSize: 16, color: Colors.black),),
+                              Text("Contact Number: ${order['phone']}", style: TextStyle(fontSize: 16, color: Colors.black,fontWeight: FontWeight.bold),),  
+                              Text("Order Date: ${order['orderPlacedDate']}", style: TextStyle(fontSize: 14, color: Colors.black),),
+                              Text("Address: ${order['address']}", style: TextStyle(fontSize: 16, color: Colors.black,fontWeight: FontWeight.bold),),
+                          
+                              Padding(
+                              padding: const EdgeInsets.only(top: 10, bottom: 10),
+                              child: Row(
+                                children: [
+                                  
+                                  Padding(
+                                    padding: const EdgeInsets.all(2.0),
+                                    child: Icon(Icons.done_outline_rounded, color: Colors.green,),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(2),
+                                    child: Text("Paid -", style: TextStyle(fontSize: 18,color: Colors.green,fontWeight: FontWeight.bold),),
+                                  ),
+                                  SizedBox(
+                                    width: 5,
+                                  ),
+                                  Text("RS. ${order['price']}", style: TextStyle(fontSize: 17, color: Colors.black,fontWeight: FontWeight.bold),),
+                                ],
+                              ),
+                          ),
+                            ],
+                          ),
                         ),
                     
                         

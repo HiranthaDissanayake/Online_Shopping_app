@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:online_shopping_app/Services/stripe_services.dart';
 import 'package:online_shopping_app/pages/order_details.dart';
 import 'package:provider/provider.dart';
 import 'package:online_shopping_app/Provider/cartProvider.dart';
@@ -14,6 +13,7 @@ class CartPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+        leading: Icon(Icons.arrow_back, color: Colors.deepOrange),
         backgroundColor: Colors.deepOrange,
         centerTitle: true,
         title: Text(
