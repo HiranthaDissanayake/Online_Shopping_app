@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:online_shopping_app/Provider/cartProvider.dart';
 import 'package:online_shopping_app/Services/Api.dart';
 import 'package:online_shopping_app/Services/stripe_services.dart';
+import 'package:online_shopping_app/pages/location_screen.dart';
 import 'package:provider/provider.dart';
 
 class OrderDetails extends StatefulWidget {
@@ -21,6 +22,25 @@ class _OrderDetailsState extends State<OrderDetails> {
   final TextEditingController _cityController = TextEditingController();
   final TextEditingController _zipCodeController = TextEditingController();
   final _formkey = GlobalKey<FormState>();
+
+  TextEditingController latitudeController = TextEditingController();
+  TextEditingController longitudeController = TextEditingController();
+  bool isLoading = false;
+
+  // Function to get user's current location
+  Future<void> _getLocation() async {
+    final selectedLocation = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => MapScreen()),
+    );
+
+    if (selectedLocation != null) {
+      setState(() {
+        latitudeController.text = selectedLocation.latitude.toString();
+        longitudeController.text = selectedLocation.longitude.toString();
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -100,7 +120,6 @@ class _OrderDetailsState extends State<OrderDetails> {
                         keyboardType: TextInputType.phone,
                       ),
                     ),
-
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: TextFormField(
@@ -113,8 +132,10 @@ class _OrderDetailsState extends State<OrderDetails> {
                           return null;
                         },
                         decoration: InputDecoration(
-                            helperText: "*Please enter email address only that you use to login",
-                            helperStyle: TextStyle(fontSize: 13,color: Colors.red),
+                            helperText:
+                                "*Please enter email address only that you use to login",
+                            helperStyle:
+                                TextStyle(fontSize: 13, color: Colors.red),
                             border: OutlineInputBorder(),
                             hintText: "Email address"),
                         keyboardType: TextInputType.text,
@@ -160,6 +181,53 @@ class _OrderDetailsState extends State<OrderDetails> {
                         ),
                       ],
                     ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: TextFormField(
+                                decoration: InputDecoration(
+                                    
+                                    border: OutlineInputBorder(),
+                                    hintText: "Latitude"),
+                                controller: latitudeController,
+                                readOnly: true,
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Please enter latitude';
+                                  }
+                                  return null;
+                                }),
+                          ),
+                        ),
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: TextFormField(
+                                decoration: InputDecoration(
+                                    border: OutlineInputBorder(),
+                                    hintText: "Longtitude"),
+                                controller: longitudeController,
+                                readOnly: true,
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Please enter longtitude';
+                                  }
+                                  return null;
+                                }),
+                          ),
+                        ),
+                      ],
+                    ),
+                    ElevatedButton.icon(
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.deepOrange),
+                      onPressed: _getLocation,
+                      icon: Icon(Icons.my_location, color: Colors.white),
+                      label: Text('Pick Location on Map',
+                          style: TextStyle(color: Colors.white)),
+                    ),
                     Padding(
                       padding: const EdgeInsets.only(top: 30),
                       child: Text(
@@ -194,12 +262,20 @@ class _OrderDetailsState extends State<OrderDetails> {
                   child: GestureDetector(
                     onTap: () async {
                       if (_formkey.currentState!.validate()) {
+                        String latitude = latitudeController.text.trim();
+                        String longitude = longitudeController.text.trim();
+
+                        if (latitude.isEmpty || longitude.isEmpty) {
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content:
+                                  Text('Please enter or fetch your location')));
+                          return;
+                        }
                         bool paymentSuccess =
                             await StripePaymentService.processPayment(
                                 cartProvider.totalPrice);
 
                         if (paymentSuccess) {
-
                           // create map to store delivery details
                           var deleveryDetails = {
                             "name": _nameController.text,
@@ -208,18 +284,18 @@ class _OrderDetailsState extends State<OrderDetails> {
                             "email": _emailController.text,
                             "city": _cityController.text,
                             "zip": _zipCodeController.text,
+                            "latitude": latitude,
+                            "longitude": longitude,
                             "price": cartProvider.totalPrice + 300,
                           };
 
                           // pass the delivery details to api
                           Api.storeOrder(deleveryDetails, context);
 
-
-                          ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text("Payment Successful!"),
-                                backgroundColor: Colors.green,
-                                ));
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Text("Payment Successful!"),
+                            backgroundColor: Colors.green,
+                          ));
                         } else {
                           ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(content: Text("Payment Failed!")));

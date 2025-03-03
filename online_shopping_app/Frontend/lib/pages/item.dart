@@ -283,7 +283,6 @@ class _ItemState extends State<Item> {
                     backgroundColor: Colors.deepOrange,
                   ),
                   onPressed: () {
-                    print("Current Count: $_count");
                     Provider.of<CartProvider>(context, listen: false).addToCart({
                       "name": widget.item["name"],
                       "price": widget.item["price"],

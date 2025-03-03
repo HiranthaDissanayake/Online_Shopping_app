@@ -20,7 +20,7 @@ void addToCart(Map<String, dynamic> item) {
 
 
   void removeFromCart(int index) {
-    _cartItems.removeAt(index);
+    _cartItems.removeAt(index); 
     notifyListeners();
   }
 
