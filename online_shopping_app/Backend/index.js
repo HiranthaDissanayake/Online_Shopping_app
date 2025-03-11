@@ -1,6 +1,11 @@
 const express = require("express");
 const mysql = require("mysql2");
 const cors = require("cors");
+const jwt = require("jsonwebtoken");
+
+
+const secret_key ="68b0fbe547a2268a6f8f327f06144eb9e79d2a0eb575d93a2b6b2f3d976f81083e46910e68903238581c8610ee0dbf679d5501236c046c4333d76ba25fd3e681";
+
 
 const app = express();
 app.use(cors());
@@ -44,6 +49,28 @@ app.post("/api/add_user", (req, res) => {
   });
 });
 
+
+
+// Middleware to verify JWT token
+const verifyToken = (req, res, next) => {
+  const token = req.headers.authorization?.split(" ")[1]; // Extract token from "Bearer <token>"
+
+  if (!token) {
+    return res.status(403).json({ message: "No token provided" });
+  }
+
+  jwt.verify(token, SECRET_KEY, (err, decoded) => {
+    if (err) {
+      return res.status(401).json({ message: "Invalid token" });
+    }
+
+    req.user = decoded; // Store user details in request
+    next();
+  });
+};
+
+
+
 // Login API
 
 app.post("/api/login", (req, res) => {
@@ -61,18 +88,24 @@ app.post("/api/login", (req, res) => {
     }
 
     if (result.length > 0) {
-      
-      // User found
-      res.status(200).json({ message: "Login successful", user: result[0].email });
+      const user = result[0];
+
+      // Generate a JWT token
+      const token = jwt.sign(
+        { userId: user.id, email: user.email }, 
+        secret_key, 
+        { expiresIn: "1h" } // Token expires in 1 hour
+      );
+
+      res.status(200).json({ message: "Login successful", token });
     } else {
-      // User not found
       res.status(401).json({ message: "Invalid email or password" });
     }
   });
 });
 
 //GET API to all blouses
-app.get("/api/blouses", (req, res) => {
+app.get("/api/blouses", verifyToken, (req, res) => {
   const sql = "SELECT * FROM blouses";
   db.query(sql, (err, results) => {
     if (err) {
@@ -84,7 +117,7 @@ app.get("/api/blouses", (req, res) => {
 });
 
 //GET API to all frocks
-app.get("/api/frocks", (req, res) => {
+app.get("/api/frocks", verifyToken, (req, res) => {
   const sql = "SELECT * FROM frocks";
   db.query(sql, (err, results) => {
     if (err) {
@@ -96,7 +129,7 @@ app.get("/api/frocks", (req, res) => {
 });
 
 //GET API to all sarees
-app.get("/api/sarees", (req, res) => {
+app.get("/api/sarees", verifyToken, (req, res) => {
   const sql = "SELECT * FROM sarees";
   db.query(sql, (err, results) => {
     if (err) {
@@ -108,7 +141,7 @@ app.get("/api/sarees", (req, res) => {
 });
 
 //GET API to all kids
-app.get("/api/kids", (req, res) => {
+app.get("/api/kids", verifyToken, (req, res) => {
   const sql = "SELECT * FROM kids";
   db.query(sql, (err, results) => {
     if (err) {
@@ -120,7 +153,7 @@ app.get("/api/kids", (req, res) => {
 });
 
 // API endpoint to fetch all products
-app.get("/api/products", (req, res) => {
+app.get("/api/products", verifyToken, (req, res) => {
   const query = `
       SELECT 'blouse' AS type, id, name, color, size, price, imageUrl FROM blouses
       UNION ALL
@@ -148,7 +181,7 @@ app.get("/api/products", (req, res) => {
 
 
 // API endpoint to fetch new arrivals
-app.get("/api/new_arrivals", (req, res) => {
+app.get("/api/new_arrivals", verifyToken, (req, res) => {
   const query = `SELECT * 
   FROM frocks 
   WHERE added_date >= DATE_SUB(CURDATE(), INTERVAL 7 DAY) 
@@ -170,8 +203,8 @@ app.get("/api/new_arrivals", (req, res) => {
 
 
 // API endpoint to post orders
-app.post("/api/orders", (req, res) => {
-  const { name, address, phone, email, city, zip, price } = req.body;
+app.post("/api/orders", verifyToken, (req, res) => {
+  const { name, address, phone, email, city, zip, price, latitude, longitude } = req.body;
 
   // Get the user ID based on the email
   const getUserIdSql = "SELECT id FROM users WHERE email = ?";
@@ -190,10 +223,10 @@ app.post("/api/orders", (req, res) => {
 
     // Insert order with user_id
     const insertOrderSql = `
-      INSERT INTO orders (customerName, address, phone, email, city, zip, price, user_id) 
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
+      INSERT INTO orders (customerName, address, phone, email, city, zip, price, user_id, latitude, longitude) 
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
 
-    db.query(insertOrderSql, [name, address, phone, email, city, zip, price, userId], (err, result) => {
+    db.query(insertOrderSql, [name, address, phone, email, city, zip, price, userId, latitude, longitude], (err, result) => {
       if (err) {
         console.error("Error inserting order:", err);
         return res.status(500).json({ error: "Failed to place order" });
@@ -206,7 +239,7 @@ app.post("/api/orders", (req, res) => {
 
 
 // API endpoint to fetch orders by user_id
-app.get("/api/userOrders/:user_id", (req, res) => {
+app.get("/api/userOrders/:user_id", verifyToken, (req, res) => {
   const userId = req.params.user_id; // Ensure we get user_id
 
   console.log("Fetching orders for user_id:", userId); // Debugging log
@@ -236,7 +269,7 @@ app.get("/api/userOrders/:user_id", (req, res) => {
 
 // API endpoint to fetch all orders
 
-app.get("/api/users/email/:email", (req, res) => {
+app.get("/api/users/email/:email", verifyToken,  (req, res) => {
   const email = req.params.email;
 
   console.log("Fetching user ID for email:", email); // Debugging log
