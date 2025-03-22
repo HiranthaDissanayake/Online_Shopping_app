@@ -5,7 +5,7 @@ import 'package:online_shopping_app/components/bottomNavBar.dart';
 
 class Api {
 
-  static const baseUrl = "http://192.168.82.38:5001/api/";
+  static const baseUrl = "http://192.168.61.38:5001/api/";
 
   // POST API for register user
 

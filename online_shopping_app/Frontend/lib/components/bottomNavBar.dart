@@ -22,7 +22,7 @@ class _BottomnavbarState extends State<Bottomnavbar> {
   int currentTabIndex = 0;
 
   late List<Widget> pages = [
-    Home(email: widget.userID.toString(),),
+    Home(email: widget.userID.toString()),
     CartPage(),
     Profile()
   ];

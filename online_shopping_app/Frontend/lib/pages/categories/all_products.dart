@@ -11,46 +11,125 @@ class AllProductsPage extends StatefulWidget {
 }
 
 class _AllProductsPageState extends State<AllProductsPage> {
+  TextEditingController searchController = TextEditingController();
+  List<dynamic> allProducts = [];
+  List<dynamic> filteredProducts = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchProducts();
+  }
+
+  Future<void> _fetchProducts() async {
+    try {
+      List<dynamic> products = await Api().fetchProducts();
+      
+      // Sort products by name before searching
+      products.sort((a, b) => a['name'].toLowerCase().compareTo(b['name'].toLowerCase()));
+
+      setState(() {
+        allProducts = products;
+        filteredProducts = products;
+      });
+    } catch (e) {
+      print("Error fetching products: $e");
+    }
+  }
+
+  // Binary Search function
+  List<dynamic> binarySearch(String query) {
+    int left = 0;
+    int right = allProducts.length - 1;
+    List<dynamic> results = [];
+
+    while (left <= right) {
+      int mid = (left + right) ~/ 2;
+      String midName = allProducts[mid]['name'].toLowerCase();
+
+      if (midName.contains(query.toLowerCase())) {
+        // Find all matches in both directions
+        int i = mid;
+        while (i >= 0 && allProducts[i]['name'].toLowerCase().contains(query.toLowerCase())) {
+          results.add(allProducts[i]);
+          i--;
+        }
+        i = mid + 1;
+        while (i < allProducts.length && allProducts[i]['name'].toLowerCase().contains(query.toLowerCase())) {
+          results.add(allProducts[i]);
+          i++;
+        }
+        break;
+      } else if (query.toLowerCase().compareTo(midName) < 0) {
+        right = mid - 1; // Search left side
+      } else {
+        left = mid + 1; // Search right side
+      }
+    }
+    
+    return results;
+  }
+
+  void _filterProducts(String query) {
+    if (query.isEmpty) {
+      setState(() {
+        filteredProducts = allProducts;
+      });
+      return;
+    }
+
+    setState(() {
+      filteredProducts = binarySearch(query);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.deepOrange,
         centerTitle: true,
-        title: Text('All Products',style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),),
+        title: Text(
+          'All Products',
+          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+        ),
       ),
-      body: FutureBuilder<List<dynamic>>(
-        future: Api().fetchProducts(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return Center(child: Text('No products available'));
-          }
-
-          // Categorize products by type
-          final products = snapshot.data!;
-          final blouses = products.where((p) => p['type'] == 'blouse').toList();
-          final frocks = products.where((p) => p['type'] == 'frock').toList();
-          final sarees = products.where((p) => p['type'] == 'saree').toList();
-          final kids = products.where((p) => p['type'] == 'kid').toList();
-
-          return ListView(
-            children: [
-              _buildProductSection('Blouses', blouses),
-              _buildProductSection('Frocks', frocks),
-              _buildProductSection('Sarees', sarees),
-              _buildProductSection('Kids', kids),
-            ],
-          );
-        },
+      body: Column(
+        children: [
+          Padding(
+            padding: EdgeInsets.all(10),
+            child: TextField(
+              controller: searchController,
+              decoration: InputDecoration(
+                hintText: "Search for products...",
+                prefixIcon: Icon(Icons.search),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              onChanged: _filterProducts,
+            ),
+          ),
+          Expanded(
+            child: filteredProducts.isEmpty
+                ? Center(child: Text("No products found"))
+                : ListView(
+                    children: [
+                      _buildProductSection('Blouses', filteredProducts.where((p) => p['type'] == 'blouse').toList()),
+                      _buildProductSection('Frocks', filteredProducts.where((p) => p['type'] == 'frock').toList()),
+                      _buildProductSection('Sarees', filteredProducts.where((p) => p['type'] == 'saree').toList()),
+                      _buildProductSection('Kids', filteredProducts.where((p) => p['type'] == 'kid').toList()),
+                    ],
+                  ),
+          ),
+        ],
       ),
     );
   }
 
   Widget _buildProductSection(String title, List<dynamic> products) {
+    if (products.isEmpty) return SizedBox(); // Hide empty categories
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
