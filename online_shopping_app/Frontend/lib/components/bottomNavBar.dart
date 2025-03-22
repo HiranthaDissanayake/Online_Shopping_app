@@ -24,7 +24,7 @@ class _BottomnavbarState extends State<Bottomnavbar> {
   late List<Widget> pages = [
     Home(email: widget.userID.toString()),
     CartPage(),
-    Profile()
+    Profile(userID: widget.userID.toString(),)
   ];
 
 

@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 
 class Profile extends StatelessWidget {
-  const Profile({super.key});
+
+  String? userID;
+   Profile({
+    super.key,
+    required this.userID
+    
+    });
 
   @override
   Widget build(BuildContext context) {
@@ -23,26 +29,9 @@ class Profile extends StatelessWidget {
                     color: Colors.deepOrange,
                   ),
                   child: Column(children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Card(
-                        margin: EdgeInsets.only(top: MediaQuery.of(context).size.height/7),
-                        elevation: 10,
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Text('Name : ', style: TextStyle(fontSize: 18, color: Colors.black),),
-                              Text('Hirantha Dissanayake', style: TextStyle(fontSize: 18, color: Colors.black),),
-                            ]
-                          )
-                        ),
-                      ),
-                    ),
 
                     Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.only(top: 150, left: 8,right: 8),
                       child: Card(
                         margin: EdgeInsets.only(top: MediaQuery.of(context).size.height/500),
                         elevation: 10,
@@ -52,7 +41,7 @@ class Profile extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               Text('Email : ', style: TextStyle(fontSize: 18, color: Colors.black),),
-                              Text('hirantha@gmail.com', style: TextStyle(fontSize: 18, color: Colors.black),),
+                              Text(userID.toString(), style: TextStyle(fontSize: 18, color: Colors.black),),
                             ]
                           )
                         ),
